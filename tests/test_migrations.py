@@ -1,13 +1,9 @@
-import sqlite3
-
 from sqlift import up
 
 
-def test_migrate_sqlite_to_first_version():
+def test_migrate_sqlite_to_first_version(cursor):
     up("001_create_test_table")
 
-    conn = sqlite3.connect("db.sqlite")
-    cursor = conn.cursor()
     result = cursor.execute("PRAGMA table_info(test);").fetchall()
 
     assert len(result) == 1
