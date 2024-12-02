@@ -69,16 +69,15 @@ def test_migrate_sqlite_to_third_version(cursor):
     )
 
 
-# def test_migrate_sqlite_to_latest():
-#     os.environ["DATABASE_URL"] = "sqlite:///tests/test.db"
-#     conn = sqlite3.connect("tests/test.db")
-#     cursor = conn.cursor()
+def test_migrate_sqlite_to_latest(cursor):
+    up()
 
-#     up()
-
-#     # check columns in table test
-#     result = cursor.execute("PRAGMA table_info(test);").fetchall()
-
-#     assert len(result) == 2
-#     assert result[0] == (0, "id", "INTEGER", 0, None, 1)
-#     assert result[1] == (1, "name", "TEXT", 0, None, 0)
+    assert_columns(cursor, "test", ["id"])
+    assert_migration_records(
+        cursor,
+        [
+            "001_create_test_table",
+            "002_add_name_to_test_table",
+            "003_delete_name_from_test_table",
+        ],
+    )

@@ -2,7 +2,7 @@ import sqlite3
 from pathlib import Path
 
 
-def up(target_migration: str) -> None:
+def up(target_migration: str | None = None) -> None:
     _create_migrations_table_if_not_exists()
     for migration_name in _get_migration_names(target_migration):
         if _is_migration_recorded(migration_name):
@@ -11,11 +11,13 @@ def up(target_migration: str) -> None:
         _record_migration(migration_name)
 
 
-def _get_migration_names(migration_name: str) -> list[str]:
+def _get_migration_names(target_migration: str | None) -> list[str]:
     migration_names = sorted(
         [migration_path.stem for migration_path in Path("migrations").glob("*.sql")]
     )
-    return migration_names[: migration_names.index(migration_name) + 1]
+    if target_migration:
+        return migration_names[: migration_names.index(target_migration) + 1]
+    return migration_names
 
 
 def _get_sql_up_command(migration_name: str) -> str:
