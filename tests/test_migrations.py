@@ -12,6 +12,10 @@ def test_migrate_sqlite_to_first_version(cursor):
     assert len(columns) == 1
     assert columns[0] == (0, "id", "INTEGER", 0, None, 1)
 
+    migration_records = cursor.execute("SELECT * FROM migrations;").fetchall()
+    assert len(migration_records) == 1
+    assert migration_records[0] == ("001_create_test_table",)
+
 
 # def test_migrate_sqlite_to_latest():
 #     os.environ["DATABASE_URL"] = "sqlite:///tests/test.db"
