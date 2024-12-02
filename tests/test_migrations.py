@@ -55,6 +55,20 @@ def test_migrate_sqlite_to_second_version(cursor):
     )
 
 
+def test_migrate_sqlite_to_third_version(cursor):
+    up("003_delete_name_from_test_table")
+
+    assert_columns(cursor, "test", ["id"])
+    assert_migration_records(
+        cursor,
+        [
+            "001_create_test_table",
+            "002_add_name_to_test_table",
+            "003_delete_name_from_test_table",
+        ],
+    )
+
+
 # def test_migrate_sqlite_to_latest():
 #     os.environ["DATABASE_URL"] = "sqlite:///tests/test.db"
 #     conn = sqlite3.connect("tests/test.db")
