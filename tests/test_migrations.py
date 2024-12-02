@@ -40,6 +40,24 @@ def test_try_migrate_sqlite_to_first_version_twice(cursor):
     assert_created_at_timestamp(first_migration_record[1])
 
 
+def test_migrate_sqlite_to_second_version(cursor):
+    up("002_add_name_to_test_table")
+
+    columns = get_table_columns(cursor, "test")
+    assert len(columns) == 2
+    assert columns[0] == (0, "id", "INTEGER", 0, None, 1)
+    assert columns[1] == (1, "name", "TEXT", 1, None, 0)
+
+    migration_records = cursor.execute("SELECT * FROM migrations;").fetchall()
+    assert len(migration_records) == 2
+    first_migration_record = migration_records[0]
+    assert first_migration_record[0] == "001_create_test_table"
+    assert_created_at_timestamp(first_migration_record[1])
+    second_migration_record = migration_records[1]
+    assert second_migration_record[0] == "002_add_name_to_test_table"
+    assert_created_at_timestamp(second_migration_record[1])
+
+
 # def test_migrate_sqlite_to_latest():
 #     os.environ["DATABASE_URL"] = "sqlite:///tests/test.db"
 #     conn = sqlite3.connect("tests/test.db")

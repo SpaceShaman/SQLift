@@ -1,12 +1,21 @@
 import sqlite3
+from pathlib import Path
 
 
 def up(migration_name: str) -> None:
     _create_migrations_table_if_not_exists()
-    if _is_migration_recorded(migration_name):
-        return
-    _execute_sql(_get_sql_up_command(migration_name))
-    _record_migration(migration_name)
+    for migration_to_up in _get_migration_names_to_up(migration_name):
+        if _is_migration_recorded(migration_to_up):
+            return
+        _execute_sql(_get_sql_up_command(migration_to_up))
+        _record_migration(migration_to_up)
+
+
+def _get_migration_names_to_up(migration_name: str) -> list[str]:
+    migration_names = sorted(
+        [migration_path.stem for migration_path in Path("migrations").glob("*.sql")]
+    )
+    return migration_names[: migration_names.index(migration_name) + 1]
 
 
 def _get_sql_up_command(migration_name: str) -> str:
