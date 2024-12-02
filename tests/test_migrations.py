@@ -1,13 +1,16 @@
 from sqlift import up
 
 
+def get_table_columns(cursor, table_name):
+    return cursor.execute(f"PRAGMA table_info({table_name});").fetchall()
+
+
 def test_migrate_sqlite_to_first_version(cursor):
     up("001_create_test_table")
 
-    result = cursor.execute("PRAGMA table_info(test);").fetchall()
-
-    assert len(result) == 1
-    assert result[0] == (0, "id", "INTEGER", 0, None, 1)
+    columns = get_table_columns(cursor, "test")
+    assert len(columns) == 1
+    assert columns[0] == (0, "id", "INTEGER", 0, None, 1)
 
 
 # def test_migrate_sqlite_to_latest():
