@@ -1,0 +1,9 @@
+--UP
+ALTER TABLE test
+ADD COLUMN name TEXT NOT NULL;
+ADD COLUMN column_to_delete TEXT NOT NULL;
+
+--DOWN
+ALTER TABLE test
+DROP COLUMN name;
+DROP COLUMN column_to_delete;
