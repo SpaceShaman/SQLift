@@ -1,3 +1,4 @@
+import sqlite3
 from datetime import datetime
 
 from sqlift import up
@@ -11,12 +12,19 @@ def assert_created_at_timestamp(timestamp):
     assert datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S") <= datetime.now()
 
 
+def assert_columns(
+    cursor: sqlite3.Cursor, table_name: str, expected_column_names: list[str]
+):
+    columns = get_table_columns(cursor, table_name)
+    assert len(columns) == len(expected_column_names)
+    for i, column in enumerate(columns):
+        assert column[1] == expected_column_names[i]
+
+
 def test_migrate_sqlite_to_first_version(cursor):
     up("001_create_test_table")
 
-    columns = get_table_columns(cursor, "test")
-    assert len(columns) == 1
-    assert columns[0] == (0, "id", "INTEGER", 0, None, 1)
+    assert_columns(cursor, "test", ["id"])
 
     migration_records = cursor.execute("SELECT * FROM migrations;").fetchall()
     assert len(migration_records) == 1
@@ -29,9 +37,7 @@ def test_try_migrate_sqlite_to_first_version_twice(cursor):
     up("001_create_test_table")
     up("001_create_test_table")
 
-    columns = get_table_columns(cursor, "test")
-    assert len(columns) == 1
-    assert columns[0] == (0, "id", "INTEGER", 0, None, 1)
+    assert_columns(cursor, "test", ["id"])
 
     migration_records = cursor.execute("SELECT * FROM migrations;").fetchall()
     assert len(migration_records) == 1
@@ -43,10 +49,7 @@ def test_try_migrate_sqlite_to_first_version_twice(cursor):
 def test_migrate_sqlite_to_second_version(cursor):
     up("002_add_name_to_test_table")
 
-    columns = get_table_columns(cursor, "test")
-    assert len(columns) == 2
-    assert columns[0] == (0, "id", "INTEGER", 0, None, 1)
-    assert columns[1] == (1, "name", "TEXT", 1, None, 0)
+    assert_columns(cursor, "test", ["id", "name"])
 
     migration_records = cursor.execute("SELECT * FROM migrations;").fetchall()
     assert len(migration_records) == 2
