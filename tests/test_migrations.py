@@ -21,16 +21,21 @@ def assert_columns(
         assert column[1] == expected_column_names[i]
 
 
+def assert_migration_records(
+    cursor: sqlite3.Cursor, expected_migration_records: list[str]
+):
+    migration_records = cursor.execute("SELECT * FROM migrations;").fetchall()
+    assert len(migration_records) == len(expected_migration_records)
+    for i, migration_record in enumerate(migration_records):
+        assert migration_record[0] == expected_migration_records[i]
+        assert_created_at_timestamp(migration_record[1])
+
+
 def test_migrate_sqlite_to_first_version(cursor):
     up("001_create_test_table")
 
     assert_columns(cursor, "test", ["id"])
-
-    migration_records = cursor.execute("SELECT * FROM migrations;").fetchall()
-    assert len(migration_records) == 1
-    first_migration_record = migration_records[0]
-    assert first_migration_record[0] == "001_create_test_table"
-    assert_created_at_timestamp(first_migration_record[1])
+    assert_migration_records(cursor, ["001_create_test_table"])
 
 
 def test_try_migrate_sqlite_to_first_version_twice(cursor):
@@ -38,27 +43,16 @@ def test_try_migrate_sqlite_to_first_version_twice(cursor):
     up("001_create_test_table")
 
     assert_columns(cursor, "test", ["id"])
-
-    migration_records = cursor.execute("SELECT * FROM migrations;").fetchall()
-    assert len(migration_records) == 1
-    first_migration_record = migration_records[0]
-    assert first_migration_record[0] == "001_create_test_table"
-    assert_created_at_timestamp(first_migration_record[1])
+    assert_migration_records(cursor, ["001_create_test_table"])
 
 
 def test_migrate_sqlite_to_second_version(cursor):
     up("002_add_name_to_test_table")
 
     assert_columns(cursor, "test", ["id", "name"])
-
-    migration_records = cursor.execute("SELECT * FROM migrations;").fetchall()
-    assert len(migration_records) == 2
-    first_migration_record = migration_records[0]
-    assert first_migration_record[0] == "001_create_test_table"
-    assert_created_at_timestamp(first_migration_record[1])
-    second_migration_record = migration_records[1]
-    assert second_migration_record[0] == "002_add_name_to_test_table"
-    assert_created_at_timestamp(second_migration_record[1])
+    assert_migration_records(
+        cursor, ["001_create_test_table", "002_add_name_to_test_table"]
+    )
 
 
 # def test_migrate_sqlite_to_latest():
