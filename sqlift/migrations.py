@@ -5,10 +5,14 @@ from pathlib import Path
 def up(target_migration: str | None = None) -> None:
     _create_migrations_table_if_not_exists()
     for migration_name in _get_migration_names(target_migration):
-        if _is_migration_recorded(migration_name):
-            return
-        _execute_sql(_get_sql_up_command(migration_name))
-        _record_migration(migration_name)
+        _apply_migration(migration_name)
+
+
+def _apply_migration(migration_name: str) -> None:
+    if _is_migration_recorded(migration_name):
+        return
+    _execute_sql(_get_sql_up_command(migration_name))
+    _record_migration(migration_name)
 
 
 def _get_migration_names(target_migration: str | None) -> list[str]:
