@@ -27,6 +27,7 @@ def _record_migration(migration_name: str) -> None:
 def _create_migrations_table_if_not_exists() -> None:
     _execute_sql("""
         CREATE TABLE IF NOT EXISTS migrations (
-            migration_name TEXT PRIMARY KEY
+            migration_name TEXT PRIMARY KEY,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
     """)

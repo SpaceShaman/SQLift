@@ -1,8 +1,14 @@
+from datetime import datetime
+
 from sqlift import up
 
 
 def get_table_columns(cursor, table_name):
     return cursor.execute(f"PRAGMA table_info({table_name});").fetchall()
+
+
+def assert_created_at_timestamp(timestamp):
+    assert datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S") <= datetime.now()
 
 
 def test_migrate_sqlite_to_first_version(cursor):
@@ -14,7 +20,9 @@ def test_migrate_sqlite_to_first_version(cursor):
 
     migration_records = cursor.execute("SELECT * FROM migrations;").fetchall()
     assert len(migration_records) == 1
-    assert migration_records[0] == ("001_create_test_table",)
+    first_migration_record = migration_records[0]
+    assert first_migration_record[0] == "001_create_test_table"
+    assert_created_at_timestamp(first_migration_record[1])
 
 
 # def test_migrate_sqlite_to_latest():
