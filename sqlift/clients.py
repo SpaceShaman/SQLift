@@ -1,4 +1,17 @@
 import sqlite3
+from typing import Protocol
+
+
+class Cursor(Protocol):
+    def fetchone(self): ...
+
+
+class Client(Protocol):
+    def execute(self, sql: str) -> Cursor: ...
+
+
+def get_client() -> Client:
+    return SQLiteClient()
 
 
 class SQLiteClient:
