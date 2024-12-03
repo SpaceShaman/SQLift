@@ -11,6 +11,12 @@ def up(target_migration: str | None = None) -> None:
         _apply_migration(migration_name)
 
 
+def down(target_migration: str | None = None) -> None:
+    _create_migrations_table_if_not_exists()
+    for migration_name in _get_migration_names(target_migration, reverse=True):
+        _revert_migration(migration_name)
+
+
 def _apply_migration(migration_name: str) -> None:
     if _is_migration_recorded(migration_name):
         return
@@ -18,24 +24,45 @@ def _apply_migration(migration_name: str) -> None:
     _record_migration(migration_name)
 
 
-def _get_migration_names(target_migration: str | None) -> list[str]:
+def _revert_migration(migration_name: str) -> None:
+    if not _is_migration_recorded(migration_name):
+        return
+    client.execute(_get_sql_down_command(migration_name))
+    _delete_migration_record(migration_name)
+
+
+def _get_migration_names(
+    target_migration: str | None, reverse: bool = False
+) -> list[str]:
     migration_names = sorted(
-        [migration_path.stem for migration_path in Path("migrations").glob("*.sql")]
+        [migration_path.stem for migration_path in Path("migrations").glob("*.sql")],
+        reverse=reverse,
     )
     if target_migration:
         return migration_names[: migration_names.index(target_migration) + 1]
     return migration_names
 
 
+def _get_sql_commands(migration_name: str) -> list[str]:
+    return open(f"migrations/{migration_name}.sql").read().split("--DOWN")
+
+
 def _get_sql_up_command(migration_name: str) -> str:
-    sql = open(f"migrations/{migration_name}.sql").read()
-    return sql.split("--DOWN")[0]
+    return _get_sql_commands(migration_name)[0]
+
+
+def _get_sql_down_command(migration_name: str) -> str:
+    return _get_sql_commands(migration_name)[1]
 
 
 def _record_migration(migration_name: str) -> None:
     client.execute(
         f"INSERT INTO migrations (migration_name) VALUES ('{migration_name}');"
     )
+
+
+def _delete_migration_record(migration_name: str) -> None:
+    client.execute(f"DELETE FROM migrations WHERE migration_name = '{migration_name}';")
 
 
 def _create_migrations_table_if_not_exists() -> None:

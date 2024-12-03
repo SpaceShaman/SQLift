@@ -1,3 +1,3 @@
-from .migrations import up
+from .migrations import down, up
 
-__all__ = ["up"]
+__all__ = ["up", "down"]
