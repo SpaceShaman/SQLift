@@ -115,3 +115,11 @@ def test_down_all_versions(cursor):
 
     assert_columns(cursor, "test", [])
     assert_migration_records(cursor, [])
+
+
+def test_try_down_to_not_applied_migration(cursor):
+    up("001_create_test_table")
+    down("002_add_name_to_test_table")
+
+    assert_columns(cursor, "test", ["id"])
+    assert_migration_records(cursor, ["001_create_test_table"])
