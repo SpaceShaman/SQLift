@@ -1,5 +1,8 @@
-import sqlite3
 from pathlib import Path
+
+from .clients import get_client
+
+client = get_client()
 
 
 def up(target_migration: str | None = None) -> None:
@@ -11,7 +14,7 @@ def up(target_migration: str | None = None) -> None:
 def _apply_migration(migration_name: str) -> None:
     if _is_migration_recorded(migration_name):
         return
-    _execute_sql(_get_sql_up_command(migration_name))
+    client.execute(_get_sql_up_command(migration_name))
     _record_migration(migration_name)
 
 
@@ -29,20 +32,14 @@ def _get_sql_up_command(migration_name: str) -> str:
     return sql.split("--DOWN")[0]
 
 
-def _execute_sql(sql: str) -> sqlite3.Cursor:
-    with sqlite3.connect("db.sqlite") as connection:
-        cursor = connection.cursor()
-        return cursor.execute(sql)
-
-
 def _record_migration(migration_name: str) -> None:
-    _execute_sql(
+    client.execute(
         f"INSERT INTO migrations (migration_name) VALUES ('{migration_name}');"
     )
 
 
 def _create_migrations_table_if_not_exists() -> None:
-    _execute_sql("""
+    client.execute("""
         CREATE TABLE IF NOT EXISTS migrations (
             migration_name TEXT PRIMARY KEY,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -52,7 +49,7 @@ def _create_migrations_table_if_not_exists() -> None:
 
 def _is_migration_recorded(migration_name: str) -> bool:
     return (
-        _execute_sql(
+        client.execute(
             f"SELECT * FROM migrations WHERE migration_name = '{migration_name}';"
         ).fetchone()
         is not None
