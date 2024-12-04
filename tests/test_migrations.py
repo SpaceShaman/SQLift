@@ -1,31 +1,9 @@
 import os
 import sqlite3
-from datetime import datetime
 
 from sqlift import down, up
 
-
-def get_table_columns(client, table_name):
-    return client.execute(f"PRAGMA table_info({table_name});").fetchall()
-
-
-def assert_created_at_timestamp(timestamp):
-    assert datetime.strptime(timestamp, "%Y-%m-%d %H:%M:%S") <= datetime.now()
-
-
-def assert_columns(client, table_name: str, expected_column_names: list[str]):
-    columns = get_table_columns(client, table_name)
-    assert len(columns) == len(expected_column_names)
-    for i, column in enumerate(columns):
-        assert column[1] == expected_column_names[i]
-
-
-def assert_migration_records(client, expected_migration_records: list[str]):
-    migration_records = client.execute("SELECT * FROM migrations;").fetchall()
-    assert len(migration_records) == len(expected_migration_records)
-    for i, migration_record in enumerate(migration_records):
-        assert migration_record[0] == expected_migration_records[i]
-        assert_created_at_timestamp(migration_record[1])
+from .asserts import assert_columns, assert_migration_records
 
 
 def test_migrate_sqlite_to_first_version(client):
