@@ -13,6 +13,14 @@ from sqlift.clients import get_client
 )
 def client(request):
     os.environ["DB_URL"] = request.param
-    yield get_client()
+    client = get_client()
+    yield client
+    _clean_db(client)
+
+
+def _clean_db(client):
     if os.path.exists("db.sqlite"):
         os.remove("db.sqlite")
+    if os.getenv("DB_URL", "").startswith("postgresql"):
+        client.execute("DROP TABLE IF EXISTS test;")
+        client.execute("DROP TABLE IF EXISTS migrations;")
