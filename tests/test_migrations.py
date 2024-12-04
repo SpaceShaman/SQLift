@@ -1,3 +1,4 @@
+import os
 import sqlite3
 from datetime import datetime
 
@@ -123,3 +124,15 @@ def test_try_down_to_not_applied_migration(cursor):
 
     assert_columns(cursor, "test", ["id"])
     assert_migration_records(cursor, ["001_create_test_table"])
+
+
+def test_migrate_sqlite_with_custom_database_name():
+    os.environ["DB_URL"] = "sqlite:///custom.db"
+
+    up("001_create_test_table")
+
+    with sqlite3.connect("custom.db") as connection:
+        cursor = connection.cursor()
+        assert_columns(cursor, "test", ["id"])
+        assert_migration_records(cursor, ["001_create_test_table"])
+    os.remove("custom.db")
