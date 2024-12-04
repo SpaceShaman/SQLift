@@ -1,10 +1,11 @@
 import os
-import sqlite3
-from typing import Protocol
+from typing import Optional, Protocol, Tuple
+
+TupleRow = Tuple
 
 
 class Cursor(Protocol):
-    def fetchone(self): ...
+    def fetchone(self) -> Optional[TupleRow]: ...
 
 
 class Client(Protocol):
@@ -12,11 +13,25 @@ class Client(Protocol):
 
 
 def get_client() -> Client:
-    return SQLiteClient()
+    if _is_sqlite():
+        return SQLiteClient()
+    if _is_postgres():
+        return PostgresClient()
+    raise ValueError("Unsupported database")
+
+
+def _is_postgres() -> bool:
+    return os.getenv("DB_URL", "").startswith("postgresql")
+
+
+def _is_sqlite() -> bool:
+    return os.getenv("DB_URL", "").startswith("sqlite")
 
 
 class SQLiteClient:
-    def execute(self, sql: str) -> sqlite3.Cursor:
+    def execute(self, sql) -> Cursor:
+        import sqlite3
+
         with sqlite3.connect(self._get_database_name()) as connection:
             cursor = connection.cursor()
             return cursor.execute(sql)
@@ -24,3 +39,15 @@ class SQLiteClient:
     def _get_database_name(self) -> str:
         db_url = os.getenv("DB_URL", "sqlite:///db.sqlite")
         return db_url.split("sqlite:///")[-1]
+
+
+class PostgresClient:
+    def execute(self, sql) -> Cursor:
+        import psycopg
+
+        with psycopg.connect(self._get_connection_string()) as connection:
+            cursor = connection.cursor()
+            return cursor.execute(sql)
+
+    def _get_connection_string(self) -> str:
+        return os.getenv("DB_URL", "postgresql://user:password@localhost/db")
