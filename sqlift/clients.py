@@ -25,7 +25,7 @@ def _is_postgres() -> bool:
 
 
 def _is_sqlite() -> bool:
-    return os.getenv("DB_URL", "").startswith("sqlite")
+    return os.getenv("DB_URL", "sqlite:///db.sqlite").startswith("sqlite")
 
 
 class SQLiteClient:

@@ -1,8 +1,13 @@
 from pathlib import Path
 
+from typer import Typer
+
 from .clients import Client, get_client
 
+app = Typer()
 
+
+@app.command()
 def up(target_migration: str | None = None) -> None:
     client = get_client()
     _create_migrations_table_if_not_exists(client)
@@ -10,6 +15,7 @@ def up(target_migration: str | None = None) -> None:
         _apply_migration(client, migration_name)
 
 
+@app.command()
 def down(target_migration: str | None = None) -> None:
     client = get_client()
     _create_migrations_table_if_not_exists(client)
@@ -81,3 +87,7 @@ def _is_migration_recorded(client: Client, migration_name: str) -> bool:
         ).fetchone()
         is not None
     )
+
+
+if __name__ == "__main__":
+    app()
