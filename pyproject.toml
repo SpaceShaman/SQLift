@@ -8,6 +8,10 @@ readme = "README.md"
 homepage = "https://github.com/SpaceShaman/SQLift"
 repository = "https://github.com/SpaceShaman/SQLift"
 documentation = "https://github.com/SpaceShaman/SQLift"
+keywords = ["cli", "postgres", "sql", "database", "sqlite", "postgresql", "migration", "sqlite3"]
+classifiers = [
+    "Programming Language :: SQL",
+]
 
 [tool.poetry.dependencies]
 python = ">=3.10.0,<4.0.0"
