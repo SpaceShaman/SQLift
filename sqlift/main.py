@@ -17,7 +17,14 @@ def up(target_migration: Annotated[Optional[str], Argument()] = None) -> None:
     _create_migrations_table_if_not_exists(client)
     for migration_name in _get_migration_names(target_migration):
         _apply_migration(client, migration_name)
-    print("[bold green]All migrations applied successfully[/bold green] :thumbs_up:")
+    if target_migration:
+        print(
+            f"[bold green]All migrations up to {target_migration} applied successfully[/bold green] :thumbs_up:"
+        )
+    else:
+        print(
+            "[bold green]All migrations applied successfully[/bold green] :thumbs_up:"
+        )
 
 
 @app.command()
@@ -27,7 +34,14 @@ def down(target_migration: Annotated[Optional[str], Argument()] = None) -> None:
     _create_migrations_table_if_not_exists(client)
     for migration_name in _get_migration_names(target_migration, reverse=True):
         _revert_migration(client, migration_name)
-    print("[bold green]All migrations reverted successfully[/bold green] :thumbs_up:")
+    if target_migration:
+        print(
+            f"[bold green]All migrations down to {target_migration} reverted successfully[/bold green] :thumbs_up:"
+        )
+    else:
+        print(
+            "[bold green]All migrations reverted successfully[/bold green] :thumbs_up:"
+        )
 
 
 def _apply_migration(client: Client, migration_name: str) -> None:
