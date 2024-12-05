@@ -52,4 +52,4 @@ class PostgresClient:
             return cursor.execute(sql)
 
     def _get_connection_string(self) -> str:
-        return os.getenv("DB_URL", "postgresql://user:password@localhost/db")
+        return os.getenv("DB_URL", "")

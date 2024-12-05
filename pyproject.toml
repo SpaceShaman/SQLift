@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "SQLift"
 version = "0.1.0"
-description = "Simple migration tool for SQL databases"
+description = "Simple CLI migration tool for SQL databases"
 license = "MIT"
 authors = ["SpaceShaman <spaceshaman@tuta.io>"]
 readme = "README.md"
