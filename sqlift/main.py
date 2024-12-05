@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import Optional
 
+from rich import print
 from typer import Argument, Typer
 from typing_extensions import Annotated
 
@@ -16,6 +17,7 @@ def up(target_migration: Annotated[Optional[str], Argument()] = None) -> None:
     _create_migrations_table_if_not_exists(client)
     for migration_name in _get_migration_names(target_migration):
         _apply_migration(client, migration_name)
+    print("[bold green]All migrations applied successfully[/bold green] :thumbs_up:")
 
 
 @app.command()
@@ -25,6 +27,7 @@ def down(target_migration: Annotated[Optional[str], Argument()] = None) -> None:
     _create_migrations_table_if_not_exists(client)
     for migration_name in _get_migration_names(target_migration, reverse=True):
         _revert_migration(client, migration_name)
+    print("[bold green]All migrations reverted successfully[/bold green] :thumbs_up:")
 
 
 def _apply_migration(client: Client, migration_name: str) -> None:
@@ -32,6 +35,7 @@ def _apply_migration(client: Client, migration_name: str) -> None:
         return
     client.execute(_get_sql_up_command(migration_name))
     _record_migration(client, migration_name)
+    print(f"[green]- {migration_name}[/green] applied successfully")
 
 
 def _revert_migration(client: Client, migration_name: str) -> None:
@@ -39,6 +43,7 @@ def _revert_migration(client: Client, migration_name: str) -> None:
         return
     client.execute(_get_sql_down_command(migration_name))
     _delete_migration_record(client, migration_name)
+    print(f"[red]- {migration_name}[/red] reverted successfully")
 
 
 def _get_migration_names(
