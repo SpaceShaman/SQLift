@@ -1,9 +1,9 @@
 # SQLift
 
 [![GitHub License](https://img.shields.io/github/license/SpaceShaman/SQLift)](https://github.com/SpaceShaman/SQLift?tab=MIT-1-ov-file)
-![Tests](https://img.shields.io/github/actions/workflow/status/SpaceShaman/SQLift/release.yml?label=tests)
-![Codecov](https://img.shields.io/codecov/c/github/SpaceShaman/SQLift)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/SQLift)
+[![Tests](https://img.shields.io/github/actions/workflow/status/SpaceShaman/SQLift/release.yml?label=tests)](https://app.codecov.io/github/SpaceShaman/SQLift)
+[![Codecov](https://img.shields.io/codecov/c/github/SpaceShaman/SQLift)](https://app.codecov.io/github/SpaceShaman/SQLift)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/SQLift)](https://pypi.org/project/SQLift)
 [![PyPI - Version](https://img.shields.io/pypi/v/SQLift)](https://pypi.org/project/SQLift)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-black)](https://github.com/psf/black)
 [![Linting: Ruff](https://img.shields.io/badge/linting-Ruff-black?logo=ruff&logoColor=black)](https://github.com/astral-sh/ruff)
