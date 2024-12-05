@@ -1,4 +1,4 @@
-# SQLift - Simple CLI migration tool for SQL databases
+# SQLift
 
 [![GitHub License](https://img.shields.io/github/license/SpaceShaman/SQLift)](https://github.com/SpaceShaman/SQLift?tab=MIT-1-ov-file)
 ![Tests](https://img.shields.io/github/actions/workflow/status/SpaceShaman/SQLift/release.yml?label=tests)
