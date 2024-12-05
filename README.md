@@ -38,6 +38,8 @@ CREATE TABLE IF NOT EXISTS test (
 DROP TABLE IF EXISTS test;
 ```
 
+You can find more examples in the `examples` directory of the repository.
+
 After you have created your migration files, you can run the following command to apply the migrations to your database. (It is recommended to start the migration files with a number to keep them in order)
 
 ```bash
@@ -75,7 +77,6 @@ If you don't set the `DB_URL` environment variable, SQLift will default to using
 
 ## Contributing
 
-<!--contributing-start-->
 Contributions are welcome! Feel free to open an issue or submit a pull request.
 I would like to keep the library to be safe as possible, so i would appreciate if you cover any new feature with tests to maintain 100% coverage.
 
