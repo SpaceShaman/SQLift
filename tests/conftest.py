@@ -8,7 +8,7 @@ from sqlift.clients import get_client
 @pytest.fixture(
     params=[
         "sqlite:///db.sqlite",
-        "postgresql://user:password@localhost/db",
+        "postgresql://postgres:password@localhost/postgres",
     ]
 )
 def client(request):
