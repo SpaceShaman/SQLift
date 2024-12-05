@@ -1,6 +1,8 @@
 import os
 from typing import Optional, Protocol, Tuple
 
+from .exceptions import UnsupportedDatabaseError
+
 TupleRow = Tuple
 
 
@@ -17,7 +19,7 @@ def get_client() -> Client:
         return SQLiteClient()
     if _is_postgres():
         return PostgresClient()
-    raise ValueError("Unsupported database")
+    raise UnsupportedDatabaseError("Unsupported database")
 
 
 def _is_postgres() -> bool:

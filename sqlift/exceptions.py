@@ -1,0 +1,2 @@
+class UnsupportedDatabaseError(Exception):
+    pass

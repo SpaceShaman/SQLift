@@ -4,6 +4,7 @@ import sqlite3
 import pytest
 
 from sqlift import up
+from sqlift.exceptions import UnsupportedDatabaseError
 
 from .asserts import assert_columns, assert_migration_records
 
@@ -75,5 +76,5 @@ def test_up_sqlite_with_custom_database_name():
 def test_try_up_with_unsupported_database():
     os.environ["DB_URL"] = "unsupported://user:password@localhost/db"
 
-    with pytest.raises(ValueError):
+    with pytest.raises(UnsupportedDatabaseError):
         up()
