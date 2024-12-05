@@ -1,6 +1,8 @@
 from pathlib import Path
+from typing import Optional
 
-from typer import Typer
+from typer import Argument, Typer
+from typing_extensions import Annotated
 
 from .clients import Client, get_client
 
@@ -8,7 +10,8 @@ app = Typer()
 
 
 @app.command()
-def up(target_migration: str | None = None) -> None:
+def up(target_migration: Annotated[Optional[str], Argument()] = None) -> None:
+    """Apply migrations up to the target migration or all if no target is provided."""
     client = get_client()
     _create_migrations_table_if_not_exists(client)
     for migration_name in _get_migration_names(target_migration):
@@ -16,7 +19,8 @@ def up(target_migration: str | None = None) -> None:
 
 
 @app.command()
-def down(target_migration: str | None = None) -> None:
+def down(target_migration: Annotated[Optional[str], Argument()] = None) -> None:
+    """Revert migrations down to the target migration or all if no target is provided."""
     client = get_client()
     _create_migrations_table_if_not_exists(client)
     for migration_name in _get_migration_names(target_migration, reverse=True):
@@ -87,7 +91,3 @@ def _is_migration_recorded(client: Client, migration_name: str) -> bool:
         ).fetchone()
         is not None
     )
-
-
-if __name__ == "__main__":
-    app()
