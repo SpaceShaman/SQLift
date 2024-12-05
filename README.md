@@ -125,4 +125,4 @@ pytest --cov=sqlift
 
 ### Database clients
 
-If you want to add support for a new database, you need to create a new client class that is consistent with the protocol class `Client` from `sqlift.clients` and implement the `execute` method. Look at the `SQLiteClient` and `PostgreSQLClient` classes for reference.
+If you want to add support for a new database, you need to create a new client class that is consistent with the protocol `Client` class from `sqlift.clients` and implement the `execute` method. Look at the `SQLiteClient` and `PostgreSQLClient` classes for reference.
