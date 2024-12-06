@@ -76,7 +76,7 @@ DB_URL=postgresql://user:password@localhost:5432/database # PostgreSQL
 DB_URL=sqlite:///path/to/database.db                      # SQLite
 ```
 
-If you don't set the `DB_URL` environment variable, SQLift will default to using SQLite with a database file named `db.sqlite` in the current directory.
+If you don't set the `DB_URL` environment variable, SQLift will default to using [SQLite](https://www.sqlite.org) with a database file named `db.sqlite` in the current directory.
 
 ## Contributing
 
@@ -128,4 +128,4 @@ pytest --cov=sqlift
 
 ### Database clients
 
-If you want to add support for a new database, you need to create a new client class that is consistent with the protocol `Client` class from `sqlift.clients` and implement the `execute` method. Look at the `SQLiteClient` and `PostgreSQLClient` classes for reference.
+If you want to add support for a new database, you need to create a new client class that is consistent with the `Client` protocol class from [sqlift.clients](https://github.com/SpaceShaman/SQLift/blob/master/sqlift/clients.py) and implement the `execute` method. Look at the `SQLiteClient` and `PostgreSQLClient` classes for reference.
