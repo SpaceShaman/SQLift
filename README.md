@@ -1,4 +1,7 @@
-# SQLift
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/logo-light.png">
+  <img src="assets/logo-dark.png" alt="SQLift">
+</picture>
 
 [![GitHub License](https://img.shields.io/github/license/SpaceShaman/SQLift)](https://github.com/SpaceShaman/SQLift?tab=MIT-1-ov-file)
 [![Tests](https://img.shields.io/github/actions/workflow/status/SpaceShaman/SQLift/release.yml?label=tests)](https://app.codecov.io/github/SpaceShaman/SQLift)
