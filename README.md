@@ -1,6 +1,6 @@
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/logo-light.png">
-  <img src="assets/logo-dark.png" alt="SQLift">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/SpaceShaman/SQLift/refs/heads/master/assets/logo-light.png">
+  <img src="https://raw.githubusercontent.com/SpaceShaman/SQLift/refs/heads/master/assets/logo-dark.png" alt="SQLift">
 </picture>
 
 [![GitHub License](https://img.shields.io/github/license/SpaceShaman/SQLift)](https://github.com/SpaceShaman/SQLift?tab=MIT-1-ov-file)
