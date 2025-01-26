@@ -18,7 +18,7 @@ def up(
     ] = None,
     migrations_path: Annotated[
         str,
-        Option("--migrations-path", "-P", help="Path to migrations folder"),
+        Option("--path", "-P", help="Path to migrations folder"),
     ] = "migrations",
 ) -> None:
     """Apply migrations up to the target migration or all if no target is provided."""
@@ -44,7 +44,7 @@ def down(
         Optional[str], Argument(help="Name of the target migration to revert down to")
     ] = None,
     migrations_path: Annotated[
-        str, Option("--migrations-path", "-P", help="Path to migrations folder")
+        str, Option("--path", "-P", help="Path to migrations folder")
     ] = "migrations",
 ) -> None:
     """Revert migrations down to the target migration or all if no target is provided."""

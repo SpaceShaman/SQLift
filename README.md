@@ -67,6 +67,12 @@ To rollback to a specific version, you can pass the version
 sqlift down 001_create_table
 ```
 
+You can also select specific path for migrations directory
+
+```bash
+sqlift up --path /path/to/migrations
+```
+
 ## Configuration
 
 SQLift uses environment variables to configure the database connection. You can set the following environment variables to configure the database connection.
