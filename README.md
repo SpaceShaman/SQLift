@@ -18,8 +18,17 @@ SQLift is a simple CLI migration tool for SQL databases. It is designed to be ea
 
 ## Installation
 
+You can install SQLift using pip:
+
 ```bash
 pip install SQLift
+```
+
+By default, SQLift uses [SQLite](https://www.sqlite.org) as the database. If you want to use [PostgreSQL](https://www.postgresql.org), you need to install the appropriate database driver.
+You can do this using the following command:
+
+```bash
+pip install SQLift[postgres]
 ```
 
 ## Usage
