@@ -36,7 +36,10 @@ class SQLiteClient:
 
         with sqlite3.connect(self._get_database_name()) as connection:
             cursor = connection.cursor()
-            return cursor.execute(sql)
+            for statement in sql.split(";"):
+                if statement.strip():
+                    cursor.execute(f"{statement};")
+            return cursor
 
     def _get_database_name(self) -> str:
         db_url = os.getenv("DB_URL", "sqlite:///db.sqlite")

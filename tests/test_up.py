@@ -47,6 +47,22 @@ def test_up_to_third_version(client):
     )
 
 
+def test_up_to_fourth_version_with_multiple_statements(client):
+    up("004_create_multiple_tables_at_once")
+
+    assert_columns(client, "first_table", ["id"])
+    assert_columns(client, "second_table", ["id"])
+    assert_migration_records(
+        client,
+        [
+            "001_create_test_table",
+            "002_add_name_to_test_table",
+            "003_delete_name_from_test_table",
+            "004_create_multiple_tables_at_once",
+        ],
+    )
+
+
 def test_up_to_latest(client):
     up()
 
@@ -57,6 +73,7 @@ def test_up_to_latest(client):
             "001_create_test_table",
             "002_add_name_to_test_table",
             "003_delete_name_from_test_table",
+            "004_create_multiple_tables_at_once",
         ],
     )
 

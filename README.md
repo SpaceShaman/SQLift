@@ -126,7 +126,7 @@ I would like to keep the library to be safe as possible, so i would appreciate i
 First, you need to run databases and you can do it simply with docker-compose:
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 Then you can run the tests with pytest:

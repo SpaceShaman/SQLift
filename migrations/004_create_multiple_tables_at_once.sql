@@ -1,0 +1,12 @@
+--UP
+CREATE TABLE IF NOT EXISTS first_table (
+    id INTEGER PRIMARY KEY
+);
+
+CREATE TABLE IF NOT EXISTS second_table (
+    id INTEGER PRIMARY KEY
+);
+
+--DOWN
+DROP TABLE IF EXISTS first_table;
+DROP TABLE IF EXISTS second_table;
